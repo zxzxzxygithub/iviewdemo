@@ -1,9 +1,10 @@
 <style scoped>
-    .layout{
+    .layout {
         border: 1px solid #d7dde4;
         background: #f5f7f9;
     }
-    .layout-logo{
+
+    .layout-logo {
         width: 100px;
         height: 30px;
         background: #5b6270;
@@ -13,29 +14,35 @@
         top: 15px;
         left: 20px;
     }
-    .layout-nav{
+
+    .layout-nav {
         width: 420px;
         margin: 0 auto;
     }
-    .layout-assistant{
+
+    .layout-assistant {
         width: 300px;
         margin: 0 auto;
         height: inherit;
     }
-    .layout-breadcrumb{
+
+    .layout-breadcrumb {
         padding: 10px 15px 0;
     }
-    .layout-content{
+
+    .layout-content {
         min-height: 200px;
         margin: 15px;
         overflow: hidden;
         background: #fff;
         border-radius: 4px;
     }
-    .layout-content-main{
+
+    .layout-content-main {
         padding: 10px;
     }
-    .layout-copy{
+
+    .layout-copy {
         text-align: center;
         padding: 10px 0 20px;
         color: #9ea7b4;
@@ -43,6 +50,7 @@
 </style>
 <template>
     <div class="layout">
+        <!--顶部栏导航-->
         <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-logo"></div>
             <div class="layout-nav">
@@ -65,64 +73,73 @@
             </div>
         </Menu>
         <!--<Menu mode="horizontal" active-name="1">-->
-            <!--<div class="layout-assistant">-->
-                <!--<Menu-item name="1">二级导航</Menu-item>-->
-                <!--<Menu-item name="2">二级导航</Menu-item>-->
-                <!--<Menu-item name="3">二级导航</Menu-item>-->
-            <!--</div>-->
+        <!--<div class="layout-assistant">-->
+        <!--<Menu-item name="1">二级导航</Menu-item>-->
+        <!--<Menu-item name="2">二级导航</Menu-item>-->
+        <!--<Menu-item name="3">二级导航</Menu-item>-->
+        <!--</div>-->
         <!--</Menu>-->
 
         <Row>
-
+<!--侧边栏导航-->
             <Col span="4">
             <div class="layout-content">
-                    <Menu active-name="1-2" width="auto"  @on-select="clickmenu" @on-open-change="menuopenchange">
-                        <Submenu name="1" >
-                            <template slot="title">
-                                <Icon type="ios-navigate"></Icon>
-                                运营微信号管理
-                            </template>
-                            <Menu-item name="1-1" >选项 1</Menu-item>
-                            <Menu-item name="1-2">选项 2</Menu-item>
-                            <Menu-item name="1-3">选项 3</Menu-item>
-                        </Submenu>
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-keypad"></Icon>
-                                微信好友管理
-                            </template>
-                            <Menu-item name="2-1">选项 1</Menu-item>
-                            <Menu-item name="2-2">选项 2</Menu-item>
-                        </Submenu>
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                聊天记录管理
-                            </template>
-                            <Menu-item name="3-1">选项 1</Menu-item>
-                            <Menu-item name="3-2">选项 2</Menu-item>
-                        </Submenu>
-                        <Submenu name="4">
-                            <template slot="title">
-                                <Icon type="ios-paper"></Icon>
-                                好友朋友圈管理
-                            </template>
-                            <Menu-item name="4-1">选项 1</Menu-item>
-                            <Menu-item name="4-2">选项 2</Menu-item>
-                        </Submenu>
-                    </Menu>
-        </div></Col>
-            <Col span="20"> <div>
-            <Tabs type="card" closable @on-tab-remove="handleTabRemove" @on-click="clicktab">
-                <Tab-pane label="标签一" v-if="tab0"><UserContent></UserContent></Tab-pane>
-                <Tab-pane label="标签二" v-if="tab1"><UserContent></UserContent></Tab-pane>
-                <Tab-pane label="标签三" v-if="tab2"><UserContent></UserContent></Tab-pane>
-            </Tabs>
+                <Menu active-name="1-2" width="auto" @on-select="clickmenu" @on-open-change="menuopenchange">
+                    <Submenu  v-for="(subm,index) in sidemenus"  name="1">
+                        <template slot="title">
+                            <Icon type="ios-navigate"></Icon>
+                            {{ subm.name }}
+                        </template>
+                        <Menu-item v-for="menuitem in subm.subsidemenu"  :name="menuitem.id">{{ menuitem.name }}</Menu-item>
 
-        </div></Col>
+                    </Submenu>
+                    <!--<Submenu name="2">-->
+                        <!--<template slot="title">-->
+                            <!--<Icon type="ios-keypad"></Icon>-->
+                            <!--微信好友管理-->
+                        <!--</template>-->
+                        <!--<Menu-item name="2-1">选项 1</Menu-item>-->
+                        <!--<Menu-item name="2-2">选项 2</Menu-item>-->
+                    <!--</Submenu>-->
+                    <!--<Submenu name="3">-->
+                        <!--<template slot="title">-->
+                            <!--<Icon type="ios-analytics"></Icon>-->
+                            <!--聊天记录管理-->
+                        <!--</template>-->
+                        <!--<Menu-item name="3-1">选项 1</Menu-item>-->
+                        <!--<Menu-item name="3-2">选项 2</Menu-item>-->
+                    <!--</Submenu>-->
+                    <!--<Submenu name="4">-->
+                        <!--<template slot="title">-->
+                            <!--<Icon type="ios-paper"></Icon>-->
+                            <!--好友朋友圈管理-->
+                        <!--</template>-->
+                        <!--<Menu-item name="4-1">选项 1</Menu-item>-->
+                        <!--<Menu-item name="4-2">选项 2</Menu-item>-->
+                    <!--</Submenu>-->
+                </Menu>
+            </div>
+            </Col>
+ <!--tabs导航-->
+            <Col span="20">
+            <div>
+                <Tabs type="card" closable @on-tab-remove="handleTabRemove" @on-click="clicktab">
+                    <Tab-pane label="标签一" v-if="tab0">
+                        <UserContent></UserContent>
+                    </Tab-pane>
+                    <Tab-pane label="标签二" v-if="tab1">
+                        <UserContent></UserContent>
+                    </Tab-pane>
+                    <Tab-pane label="标签三" v-if="tab2">
+                        <UserContent></UserContent>
+                    </Tab-pane>
+                </Tabs>
+
+            </div>
+            </Col>
         </Row>
 
-
+<!--版权说明-->
         <div class="layout-copy">
             2011-2017 &copy; Qiaoqiao
         </div>
@@ -136,24 +153,86 @@
             return {
                 tab0: true,
                 tab1: true,
-                tab2: true
+                tab2: true,
+                sidemenus: [
+
+                    {
+                        name: '运营微信号管理',
+                        subsidemenu: [
+                            {
+                                id: '1-1',
+                                name: '选项1'
+
+                            }, {
+                                id: '1-2',
+                                name: '选项2'
+                            }, {
+                                id: '1-3',
+                                name: '选项3'
+                            }
+                        ]
+
+                    },
+                    {
+                        name: '微信好友管理',
+                        subsidemenu: [
+                            {
+                                id: '2-1',
+                                name: '选项1'
+
+                            }, {
+                                id: '2-2',
+                                name: '选项2'
+                            }
+                        ]
+
+                    },
+                    {
+                        name: '聊天记录管理',
+                        subsidemenu: [
+                            {
+                                id: '3-1',
+                                name: '选项1'
+
+                            }, {
+                                id: '3-2',
+                                name: '选项2'
+                            }
+                        ]
+
+                    },
+                    {
+                        name: '好友朋友圈管理',
+                        subsidemenu: [
+                            {
+                                id: '4-1',
+                                name: '选项1'
+
+                            }, {
+                                id: '4-2',
+                                name: '选项2'
+                            }
+                        ]
+
+                    },
+                ]
             }
         },
         components: {
             UserContent
         },
         methods: {
-            clickmenu (name) {
+            clickmenu (id) {
 //               alert("hello click"+name);
-               this.$router.push(name);
+                this.$router.push(id);
 
 
             },
             menuopenchange(aaa){
 //                alert("hello click"+aaa);
-            },handleTabRemove (name) {
+            }, handleTabRemove (name) {
                 this['tab' + name] = false;
-            },clicktab(name){
+            }, clicktab(name){
                 this.$router.push(name);
             }
         }
