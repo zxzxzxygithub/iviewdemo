@@ -71,9 +71,11 @@
                 <!--<Menu-item name="3">二级导航</Menu-item>-->
             <!--</div>-->
         <!--</Menu>-->
-        <div class="layout-content">
-            <Row>
-                <i-col span="5">
+
+        <Row>
+
+            <Col span="4">
+            <div class="layout-content">
                     <Menu active-name="1-2" width="auto"  @on-select="clickmenu" @on-open-change="menuopenchange">
                         <Submenu name="1" >
                             <template slot="title">
@@ -109,13 +111,18 @@
                             <Menu-item name="4-2">选项 2</Menu-item>
                         </Submenu>
                     </Menu>
-                </i-col>
-                <i-col span="19">
-                    <UserContent></UserContent>
-                </i-col>
+        </div></Col>
+            <Col span="20"> <div>
+            <Tabs type="card" closable @on-tab-remove="handleTabRemove" @on-click="clicktab">
+                <Tab-pane label="标签一" v-if="tab0"><UserContent></UserContent></Tab-pane>
+                <Tab-pane label="标签二" v-if="tab1"><UserContent></UserContent></Tab-pane>
+                <Tab-pane label="标签三" v-if="tab2"><UserContent></UserContent></Tab-pane>
+            </Tabs>
 
-            </Row>
-        </div>
+        </div></Col>
+        </Row>
+
+
         <div class="layout-copy">
             2011-2017 &copy; Qiaoqiao
         </div>
@@ -125,18 +132,29 @@
 <script>
     import UserContent from './UserContent.vue'
     export default {
-
+        data () {
+            return {
+                tab0: true,
+                tab1: true,
+                tab2: true
+            }
+        },
         components: {
             UserContent
         },
         methods: {
             clickmenu (name) {
 //               alert("hello click"+name);
-                this.$router.push(name);
+               this.$router.push(name);
+
 
             },
             menuopenchange(aaa){
 //                alert("hello click"+aaa);
+            },handleTabRemove (name) {
+                this['tab' + name] = false;
+            },clicktab(name){
+                this.$router.push(name);
             }
         }
     }
