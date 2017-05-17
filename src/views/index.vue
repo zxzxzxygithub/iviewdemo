@@ -123,16 +123,20 @@
  <!--tabs导航-->
             <Col span="20">
             <div>
-                <Tabs type="card" closable @on-tab-remove="handleTabRemove" @on-click="clicktab">
-                    <Tab-pane label="标签一" v-if="tab0">
-                        <UserContent></UserContent>
+                <Tabs type="card" closable @on-tab-remove="handleTabRemove" @on-click="clicktab"
+                >
+                    <Tab-pane
+                    v-for="toptab in tabs"  v-if="toptab.show" v-html="Second"
+                    :label="toptab.name"
+                    >
                     </Tab-pane>
-                    <Tab-pane label="标签二" v-if="tab1">
-                        <UserContent></UserContent>
-                    </Tab-pane>
-                    <Tab-pane label="标签三" v-if="tab2">
-                        <UserContent></UserContent>
-                    </Tab-pane>
+                    <!--<Tab-pane label="标签二" v-if="tab1">-->
+                        <!--<UserContent></UserContent>-->
+                    <!--</Tab-pane>-->
+                    <!--<Tab-pane label="标签三" v-if="tab2">-->
+                     <!---->
+                        <!--<UserContent></UserContent>-->
+                    <!--</Tab-pane>-->
                 </Tabs>
 
             </div>
@@ -147,13 +151,22 @@
 </template>
 
 <script>
-    import UserContent from './UserContent.vue'
+    import UserContent from './UserContent.vue';
+    import Second from './Second.vue';
+    import Third from './Third.vue';
+    import Four from './Four.vue';
+    import Five from './Five.vue';
+    import Six from './Six.vue';
+    import Seven from './Seven.vue';
+    import Eight from './Eight.vue';
+    import Night from './Night.vue';
     export default {
         data () {
             return {
                 tab0: true,
                 tab1: true,
                 tab2: true,
+                tabs: [],
                 sidemenus: [
 
                     {
@@ -161,28 +174,42 @@
                         subsidemenu: [
                             {
                                 id: '1-1',
-                                name: '选项1'
+                                name: '选项1',
+                                page: '<Second></Second>',
+                                show:false
 
                             }, {
                                 id: '1-2',
-                                name: '选项2'
+                                name: '选项2',
+                                page: '<Second></Second>',
+                                show:false
                             }, {
                                 id: '1-3',
                                 name: '选项3'
+                                ,
+                                page: '<Second></Second>',
+                                show:false
                             }
                         ]
 
-                    },
+                    }
+                    ,
                     {
                         name: '微信好友管理',
                         subsidemenu: [
                             {
                                 id: '2-1',
                                 name: '选项1'
+                                ,
+                                page: Five,
+                                show:false
 
                             }, {
                                 id: '2-2',
                                 name: '选项2'
+                                ,
+                                page: Six,
+                                show:false
                             }
                         ]
 
@@ -193,10 +220,16 @@
                             {
                                 id: '3-1',
                                 name: '选项1'
+                                ,
+                                page: Seven,
+                                show:false
 
                             }, {
                                 id: '3-2',
                                 name: '选项2'
+                                ,
+                                page: Eight,
+                                show:false
                             }
                         ]
 
@@ -207,33 +240,65 @@
                             {
                                 id: '4-1',
                                 name: '选项1'
+                                ,
+                                page: Night,
+                                show:false
 
                             }, {
                                 id: '4-2',
                                 name: '选项2'
+                                ,
+                                page: Five,
+                                show:false
                             }
                         ]
-
-                    },
+                    }
                 ]
             }
         },
         components: {
             UserContent
         },
+        created(){
+            console.log('oncreate is doing ');
+            var result =  [];
+            for(var i=0;i<this.sidemenus.length; i++){
+                console.log(this.sidemenus[i]);
+                for(var j =0; j<this.sidemenus[i].subsidemenu.length; j++){
+                    console.log(this.sidemenus[i].subsidemenu.length);
+                    this.tabs.push(this.sidemenus[i].subsidemenu[j]);
+                }
+            }
+        },
         methods: {
             clickmenu (id) {
 //               alert("hello click"+name);
-                this.$router.push(id);
-
+//                this.$router.push(id);
+                for(var i=0; i<this.tabs.length; i++){
+                    if(id == this.tabs[i].id){
+                        this.tabs[i].show=true;
+                    }
+                }
 
             },
             menuopenchange(aaa){
 //                alert("hello click"+aaa);
             }, handleTabRemove (name) {
-                this['tab' + name] = false;
+//                for(var i=0; i<this.tabs.length; i++){
+//                    if(id == this.tabs[i].id){
+//                        this.tabs[i].show=true;
+//                    }
+//                }
+                this.tabs[name].show =false;
             }, clicktab(name){
                 this.$router.push(name);
+            }
+        },
+        computed: {
+            // a computed getter
+             toptbs: function () {
+                // `this` points to the vm instance
+
             }
         }
     }
