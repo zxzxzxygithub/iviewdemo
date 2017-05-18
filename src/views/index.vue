@@ -47,38 +47,38 @@
         padding: 10px 0 20px;
         color: #9ea7b4;
     }
+    .layout-icon{
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+    }
+
 </style>
 <template>
     <div class="layout">
-        <!--顶部栏导航-->
-        <Menu mode="horizontal" theme="dark" active-name="1">
-            <div class="layout-logo"></div>
-            <div class="layout-nav">
-                <Menu-item name="1">
-                    <Icon type="ios-navigate"></Icon>
-                    导航一
-                </Menu-item>
-                <Menu-item name="2">
-                    <Icon type="ios-keypad"></Icon>
-                    导航二
-                </Menu-item>
-                <Menu-item name="3">
-                    <Icon type="ios-analytics"></Icon>
-                    导航三
-                </Menu-item>
-                <Menu-item name="4">
-                    <Icon type="ios-paper"></Icon>
-                    导航四
-                </Menu-item>
-            </div>
-        </Menu>
-        <!--<Menu mode="horizontal" active-name="1">-->
-        <!--<div class="layout-assistant">-->
-        <!--<Menu-item name="1">二级导航</Menu-item>-->
-        <!--<Menu-item name="2">二级导航</Menu-item>-->
-        <!--<Menu-item name="3">二级导航</Menu-item>-->
-        <!--</div>-->
-        <!--</Menu>-->
+        <Row type="flex"  align="middle">
+            <Col span="2"><img src="../images/logo.png" class="layout-icon"></img></Col>
+            <Col span="3">悄悄科技云控管理系统</Col>
+            <Col span="2" offset="2"></Col>
+            <Col span="2">{{date}}</Col>
+            <Col span="2">星期四</Col>
+            <Col span="2">在线人数:{{onlineCount}}</Col>
+            <Col span="2">在线微信号:{{onlineWXCount}}</Col>
+            <Col span="2">账号：admin</Col>
+            <Col span="2">
+                <Dropdown trigger="click">
+                    <a href="javascript:void(0)">个人设置
+                        <Icon type="arrow-down-b"></Icon>
+                    </a>
+                    <Dropdown-menu slot="list">
+                        <Dropdown-item><span v-on:click="userInfo"> 个人信息</span></Dropdown-item>
+                        <Dropdown-item><span v-on:click="modifyPwd"> 修改密码</span></Dropdown-item>
+                    </Dropdown-menu>
+                </Dropdown>
+            </Col>
+            <Col span="2"><Button type="text" v-on:click="logoutClick">退出登录</Button></Col>
+        </Row>
+
 
         <Row>
 <!--侧边栏导航-->
@@ -130,8 +130,8 @@
                     :label="toptab.label" :name="toptab.id" :key="toptab.id"
                     >
                         <keep-alive>
-                        <component v-bind:is="toptab.component" ></component>
-                            </keep-alive>
+                            <component v-bind:is="toptab.component"></component>
+                        </keep-alive>
                     </Tab-pane>
                     <!--<Tab-pane label="标签二" v-if="tab1">-->
                         <!--<UserContent></UserContent>-->
@@ -167,9 +167,12 @@
     export default {
         data () {
             return {
+                date: new Date().toDateString(),
+                onlineCount:133,
+                onlineWXCount:322,
 
                 //当前激活的tab的id
-                activeTabId:'',
+                activeTabId: '1-1',
 
                 //所有tabs
                 tabs: [],
@@ -280,8 +283,19 @@
         },
 
         methods: {
+            logoutClick(){
+                this.$router.push('/login')
+            },
+            userInfo()
+            {
+                alert("个人信息")
+            },
+            modifyPwd()
+            {
+                alert("修改密码")
+            },
 
-            //将sidemenus配置单独提取到tabs
+            //将sidemenus配置单独提取到tabs，方便遍历
             copyTabs(){
                 for(var i=0;i<this.sidemenus.length; i++){
                     //console.log(this.sidemenus[i]);
@@ -300,6 +314,7 @@
             clickMenu (id) {
                 for(var i=0; i<this.tabs.length; i++){
                     if(id == this.tabs[i].id){
+                        console.log(id,this.tabs[i])
                         this.tabs[i].show = true;
                         this.activeTabId = this.tabs[i].id;
                         return false;
