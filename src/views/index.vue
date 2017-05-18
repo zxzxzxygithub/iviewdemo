@@ -88,9 +88,9 @@
                     <Submenu  v-for="(subm,index) in sidemenus"  :name="index">
                         <template slot="title">
                             <Icon type="ios-navigate"></Icon>
-                            {{ subm.name }}
+                            {{ subm.label }}
                         </template>
-                        <Menu-item v-for="menuitem in subm.subsidemenu"  :name="menuitem.id">{{ menuitem.name }}</Menu-item>
+                        <Menu-item v-for="menuitem in subm.subsidemenu"  :name="menuitem.id">{{ menuitem.label }}</Menu-item>
 
                     </Submenu>
                     <!--<Submenu name="2">-->
@@ -127,10 +127,10 @@
                 >
                     <Tab-pane
                     v-for="(toptab,index) in tabs"  v-if="toptab.show"
-                    :label="toptab.name" :name="toptab.name" :id="'tab'+toptab.id"
+                    :label="toptab.label" :name="toptab.id"
                     >
                         <keep-alive>
-                        <component v-bind:is="toptab.component" name=""></component>
+                        <component v-bind:is="toptab.component" ></component>
                             </keep-alive>
                     </Tab-pane>
                     <!--<Tab-pane label="标签二" v-if="tab1">-->
@@ -175,22 +175,22 @@
                 sidemenus: [
 
                     {
-                        name: '运营微信号管理',
+                        label: '运营微信号管理',
                         subsidemenu: [
                             {
                                 id: '1-1',
-                                name: '选项1',
+                                label: '选项1',
                                 component: 'Second',
                                 show:false
 
                             }, {
                                 id: '1-2',
-                                name: '选项2',
+                                label: '选项2',
                                 component: 'Third',
                                 show:false
                             }, {
                                 id: '1-3',
-                                name: '选项3'
+                                label: '选项3'
                                 ,
                                 component: 'Four',
                                 show:false
@@ -200,17 +200,17 @@
                     }
                     ,
                     {
-                        name: '微信好友管理',
+                        label: '微信好友管理',
                         subsidemenu: [
                             {
                                 id: '2-1',
-                                name: '选项1',
+                                label: '选项2-1',
                                 component: 'Five',
                                 show:false
 
                             }, {
                                 id: '2-2',
-                                name: '选项2'
+                                label: '选项2-2'
                                 ,
                                 component: 'Six',
                                 show:false
@@ -219,17 +219,17 @@
 
                     },
                     {
-                        name: '聊天记录管理',
+                        label: '聊天记录管理',
                         subsidemenu: [
                             {
                                 id: '3-1',
-                                name: '选项1',
+                                label: '选项3-1',
                                 component: 'Seven',
                                 show:false
 
                             }, {
                                 id: '3-2',
-                                name: '选项2'
+                                label: '选项3-2'
                                 ,
                                 component: 'Eight',
                                 show:false
@@ -238,18 +238,18 @@
 
                     },
                     {
-                        name: '好友朋友圈管理',
+                        label: '好友朋友圈管理',
                         subsidemenu: [
                             {
                                 id: '4-1',
-                                name: '选项1'
+                                label: '选项4-1'
                                 ,
                                 component: 'Night',
                                 show:false
 
                             }, {
                                 id: '4-2',
-                                name: '选项2'
+                                label: '选项4-2'
                                 ,
                                 component: 'Second',
                                 show:false
@@ -288,17 +288,16 @@
                 for(var i=0; i<this.tabs.length; i++){
                     if(id == this.tabs[i].id){
                         this.tabs[i].show=true;
-                        this.usercontentid= this.tabs[i].name;
+                        this.usercontentid= this.tabs[i].id;
                     }
                 }
 
             },
             menuopenchange(aaa){
 //                alert("hello click"+aaa);
-            }, handleTabRemove (name) {
-                alert(name);
+            }, handleTabRemove (label) {
                 for(var i=0; i<this.tabs.length; i++){
-                    if(name == this.tabs[i].name){
+                    if(label == this.tabs[i].label){
                         this.tabs[i].show=false;
                     }
                 }
