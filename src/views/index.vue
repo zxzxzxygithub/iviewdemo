@@ -52,9 +52,10 @@
         color: #9ea7b4;
     }
     .layout-icon{
-        width: 50px;
-        height: 50px;
-        margin-left: 10px;
+        width: 40px;
+        height: 40px;
+        vertical-align: middle;
+        margin: 5px 5px 5px 10px;
     }
     .layout-tab-content{
         margin: 0 10px;
@@ -77,8 +78,7 @@
 <template>
     <div class="layout">
         <Row type="flex"  align="middle" class="primary-bg header-nav">
-            <Col span="2"><img src="../images/logo.png" class="layout-icon"></img></Col>
-            <Col span="3">悄悄科技云控管理系统</Col>
+            <Col span="5"><img src="../images/logo.png" class="layout-icon"></img><b>悄悄科技云控管理系统</b></Col>
             <Col span="2" offset="2"></Col>
             <Col span="2">{{date}}</Col>
             <Col span="2">星期四</Col>
