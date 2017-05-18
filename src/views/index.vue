@@ -1,4 +1,8 @@
 <style scoped>
+    .ivu-menu {
+        min-height: 700px;
+    }
+
     .layout {
         border: 1px solid #d7dde4;
         background: #f5f7f9;
@@ -52,11 +56,27 @@
         height: 50px;
         margin-left: 10px;
     }
+    .layout-tab-content{
+        margin: 0 10px;
+    }
+
+    .primary-bg{
+        background-color: #3399ff;
+        color: #fff;
+    }
+
+    .primary-color{
+        background-color: #3399ff;
+    }
+    
+    .link-white{
+        color: #fff;
+    }
 
 </style>
 <template>
     <div class="layout">
-        <Row type="flex"  align="middle">
+        <Row type="flex"  align="middle" class="primary-bg header-nav">
             <Col span="2"><img src="../images/logo.png" class="layout-icon"></img></Col>
             <Col span="3">悄悄科技云控管理系统</Col>
             <Col span="2" offset="2"></Col>
@@ -76,15 +96,15 @@
                     </Dropdown-menu>
                 </Dropdown>
             </Col>
-            <Col span="2"><Button type="text" v-on:click="logoutClick">退出登录</Button></Col>
+            <Col span="2"><Button type="text" class="link-white" v-on:click="logoutClick">退出登录</Button></Col>
         </Row>
 
 
         <Row>
 <!--侧边栏导航-->
+        <div class="layout-content">
             <Col span="4">
-            <div class="layout-content">
-                <Menu active-name="1-2" width="auto" @on-select="clickMenu" @on-open-change="menuoChange">
+                <Menu :active-name="initActiveTab" :open-names="[0]" width="auto" @on-select="clickMenu" @on-open-change="menuoChange">
                     <Submenu  v-for="(subm,index) in sidemenus"  :name="index" :key="subm.label">
                         <template slot="title">
                             <Icon type="ios-navigate"></Icon>
@@ -118,19 +138,19 @@
                         <!--<Menu-item name="4-2">选项 2</Menu-item>-->
                     <!--</Submenu>-->
                 </Menu>
-            </div>
+            
             </Col>
  <!--tabs导航-->
             <Col span="20">
             <div>
-                <Tabs type="card" closable :value="activeTabId" @on-tab-remove="handleTabRemove" @on-click="clickTab"
+                <Tabs type="card" closable :value="activeTabId" :animated="false" @on-tab-remove="handleTabRemove" @on-click="clickTab"
                 >
                     <Tab-pane
                     v-for="(toptab,index) in tabs"  v-if="toptab.show"
                     :label="toptab.label" :name="toptab.id" :key="toptab.id"
                     >
                         <keep-alive>
-                            <component v-bind:is="toptab.component"></component>
+                            <component v-bind:is="toptab.component" class="layout-tab-content"></component>
                         </keep-alive>
                     </Tab-pane>
                     <!--<Tab-pane label="标签二" v-if="tab1">-->
@@ -144,6 +164,7 @@
 
             </div>
             </Col>
+        </div>
         </Row>
 
 <!--版权说明-->
@@ -170,9 +191,9 @@
                 date: new Date().toDateString(),
                 onlineCount:133,
                 onlineWXCount:322,
-
+                initActiveTab: '1-1',
                 //当前激活的tab的id
-                activeTabId: '1-1',
+                activeTabId: this.initActiveTab,
 
                 //所有tabs
                 tabs: [],
@@ -186,7 +207,7 @@
                             {
                                 id: '1-1',
                                 label: '选项1',
-                                component: 'Second',
+                                component: 'Eight',
                                 show:false
 
                             }, {
@@ -237,7 +258,7 @@
                                 id: '3-2',
                                 label: '选项3-2'
                                 ,
-                                component: 'Eight',
+                                component: 'Second',
                                 show:false
                             }
                         ]
@@ -280,6 +301,7 @@
 
         created(){
             this.copyTabs();
+            this.tabs[0].show = true;
         },
 
         methods: {
@@ -314,7 +336,7 @@
             clickMenu (id) {
                 for(var i=0; i<this.tabs.length; i++){
                     if(id == this.tabs[i].id){
-                        console.log(id,this.tabs[i])
+                        //console.log(id,this.tabs[i])
                         this.tabs[i].show = true;
                         this.activeTabId = this.tabs[i].id;
                         return false;
