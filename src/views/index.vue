@@ -85,7 +85,7 @@
             <Col span="4">
             <div class="layout-content">
                 <Menu active-name="1-2" width="auto" @on-select="clickmenu" @on-open-change="menuopenchange">
-                    <Submenu  v-for="(subm,index) in sidemenus"  name="1">
+                    <Submenu  v-for="(subm,index) in sidemenus"  :name="index">
                         <template slot="title">
                             <Icon type="ios-navigate"></Icon>
                             {{ subm.name }}
@@ -123,12 +123,15 @@
  <!--tabs导航-->
             <Col span="20">
             <div>
-                <Tabs type="card" closable @on-tab-remove="handleTabRemove" @on-click="clicktab"
+                <Tabs type="card" closable :value="usercontentid" @on-tab-remove="handleTabRemove" @on-click="clicktab"
                 >
                     <Tab-pane
-                    v-for="toptab in tabs"  v-if="toptab.show" v-html="Second"
-                    :label="toptab.name"
+                    v-for="(toptab,index) in tabs"  v-if="toptab.show"
+                    :label="toptab.name" :name="toptab.name" :id="'tab'+toptab.id"
                     >
+                        <keep-alive>
+                        <component v-bind:is="toptab.component" name=""></component>
+                            </keep-alive>
                     </Tab-pane>
                     <!--<Tab-pane label="标签二" v-if="tab1">-->
                         <!--<UserContent></UserContent>-->
@@ -163,10 +166,12 @@
     export default {
         data () {
             return {
+                usercontentid:'',
                 tab0: true,
                 tab1: true,
                 tab2: true,
                 tabs: [],
+                tabView:'',
                 sidemenus: [
 
                     {
@@ -175,19 +180,19 @@
                             {
                                 id: '1-1',
                                 name: '选项1',
-                                page: '<Second></Second>',
+                                component: 'Second',
                                 show:false
 
                             }, {
                                 id: '1-2',
                                 name: '选项2',
-                                page: '<Second></Second>',
+                                component: 'Third',
                                 show:false
                             }, {
                                 id: '1-3',
                                 name: '选项3'
                                 ,
-                                page: '<Second></Second>',
+                                component: 'Four',
                                 show:false
                             }
                         ]
@@ -199,16 +204,15 @@
                         subsidemenu: [
                             {
                                 id: '2-1',
-                                name: '选项1'
-                                ,
-                                page: Five,
+                                name: '选项1',
+                                component: 'Five',
                                 show:false
 
                             }, {
                                 id: '2-2',
                                 name: '选项2'
                                 ,
-                                page: Six,
+                                component: 'Six',
                                 show:false
                             }
                         ]
@@ -219,16 +223,15 @@
                         subsidemenu: [
                             {
                                 id: '3-1',
-                                name: '选项1'
-                                ,
-                                page: Seven,
+                                name: '选项1',
+                                component: 'Seven',
                                 show:false
 
                             }, {
                                 id: '3-2',
                                 name: '选项2'
                                 ,
-                                page: Eight,
+                                component: 'Eight',
                                 show:false
                             }
                         ]
@@ -241,14 +244,14 @@
                                 id: '4-1',
                                 name: '选项1'
                                 ,
-                                page: Night,
+                                component: 'Night',
                                 show:false
 
                             }, {
                                 id: '4-2',
                                 name: '选项2'
                                 ,
-                                page: Five,
+                                component: 'Second',
                                 show:false
                             }
                         ]
@@ -257,7 +260,15 @@
             }
         },
         components: {
-            UserContent
+            UserContent,
+            Second,
+            Third,
+            Four,
+            Five,
+            Six,
+            Seven,
+            Eight,
+            Night
         },
         created(){
             console.log('oncreate is doing ');
@@ -277,6 +288,7 @@
                 for(var i=0; i<this.tabs.length; i++){
                     if(id == this.tabs[i].id){
                         this.tabs[i].show=true;
+                        this.usercontentid= this.tabs[i].name;
                     }
                 }
 
@@ -284,21 +296,13 @@
             menuopenchange(aaa){
 //                alert("hello click"+aaa);
             }, handleTabRemove (name) {
-//                for(var i=0; i<this.tabs.length; i++){
-//                    if(id == this.tabs[i].id){
-//                        this.tabs[i].show=true;
-//                    }
-//                }
-                this.tabs[name].show =false;
+                alert(name);
+                for(var i=0; i<this.tabs.length; i++){
+                    if(name == this.tabs[i].name){
+                        this.tabs[i].show=false;
+                    }
+                }
             }, clicktab(name){
-                this.$router.push(name);
-            }
-        },
-        computed: {
-            // a computed getter
-             toptbs: function () {
-                // `this` points to the vm instance
-
             }
         }
     }

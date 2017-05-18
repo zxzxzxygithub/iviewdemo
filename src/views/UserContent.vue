@@ -7,8 +7,19 @@
 </template>
 
 <script>
+    import UserContent from './UserContent.vue';
+    import Second from './Second.vue';
+    import Third from './Third.vue';
+    import Four from './Four.vue';
+    import Five from './Five.vue';
+    import Six from './Six.vue';
+    import Seven from './Seven.vue';
+    import Eight from './Eight.vue';
+    import Night from './Night.vue';
 export default {
-  name: 'UserContent'
+
+  name: 'UserContent',
+
 }
 </script>
 
