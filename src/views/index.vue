@@ -84,13 +84,13 @@
 <!--侧边栏导航-->
             <Col span="4">
             <div class="layout-content">
-                <Menu active-name="1-2" width="auto" @on-select="clickmenu" @on-open-change="menuopenchange">
-                    <Submenu  v-for="(subm,index) in sidemenus"  :name="index">
+                <Menu active-name="1-2" width="auto" @on-select="clickMenu" @on-open-change="menuoChange">
+                    <Submenu  v-for="(subm,index) in sidemenus"  :name="index" :key="subm.label">
                         <template slot="title">
                             <Icon type="ios-navigate"></Icon>
                             {{ subm.label }}
                         </template>
-                        <Menu-item v-for="menuitem in subm.subsidemenu"  :name="menuitem.id">{{ menuitem.label }}</Menu-item>
+                        <Menu-item v-for="menuitem in subm.subsidemenu"  :name="menuitem.id" :key="menuitem.id">{{ menuitem.label }}</Menu-item>
 
                     </Submenu>
                     <!--<Submenu name="2">-->
@@ -123,11 +123,11 @@
  <!--tabs导航-->
             <Col span="20">
             <div>
-                <Tabs type="card" closable :value="usercontentid" @on-tab-remove="handleTabRemove" @on-click="clicktab"
+                <Tabs type="card" closable :value="activeTabId" @on-tab-remove="handleTabRemove" @on-click="clickTab"
                 >
                     <Tab-pane
                     v-for="(toptab,index) in tabs"  v-if="toptab.show"
-                    :label="toptab.label" :name="toptab.id"
+                    :label="toptab.label" :name="toptab.id" :key="toptab.id"
                     >
                         <keep-alive>
                         <component v-bind:is="toptab.component" ></component>
@@ -163,15 +163,18 @@
     import Seven from './Seven.vue';
     import Eight from './Eight.vue';
     import Night from './Night.vue';
+
     export default {
         data () {
             return {
-                usercontentid:'',
-                tab0: true,
-                tab1: true,
-                tab2: true,
+
+                //当前激活的tab的id
+                activeTabId:'',
+
+                //所有tabs
                 tabs: [],
-                tabView:'',
+
+                //所有菜单及tabs的配置
                 sidemenus: [
 
                     {
@@ -259,6 +262,7 @@
                 ]
             }
         },
+
         components: {
             UserContent,
             Second,
@@ -270,38 +274,69 @@
             Eight,
             Night
         },
+
         created(){
-            console.log('oncreate is doing ');
-            var result =  [];
-            for(var i=0;i<this.sidemenus.length; i++){
-                console.log(this.sidemenus[i]);
-                for(var j =0; j<this.sidemenus[i].subsidemenu.length; j++){
-                    console.log(this.sidemenus[i].subsidemenu.length);
-                    this.tabs.push(this.sidemenus[i].subsidemenu[j]);
-                }
-            }
+            this.copyTabs();
         },
+
         methods: {
-            clickmenu (id) {
-//               alert("hello click"+name);
-//                this.$router.push(id);
-                for(var i=0; i<this.tabs.length; i++){
-                    if(id == this.tabs[i].id){
-                        this.tabs[i].show=true;
-                        this.usercontentid= this.tabs[i].id;
+
+            //将sidemenus配置单独提取到tabs
+            copyTabs(){
+                for(var i=0;i<this.sidemenus.length; i++){
+                    //console.log(this.sidemenus[i]);
+                    for(var j =0; j<this.sidemenus[i].subsidemenu.length; j++){
+                        this.tabs.push(this.sidemenus[i].subsidemenu[j]);
                     }
                 }
+            },
+
+            //展开菜单
+            menuoChange(){
 
             },
-            menuopenchange(aaa){
-//                alert("hello click"+aaa);
-            }, handleTabRemove (label) {
+
+            //点击菜单
+            clickMenu (id) {
                 for(var i=0; i<this.tabs.length; i++){
-                    if(label == this.tabs[i].label){
-                        this.tabs[i].show=false;
+                    if(id == this.tabs[i].id){
+                        this.tabs[i].show = true;
+                        this.activeTabId = this.tabs[i].id;
+                        return false;
                     }
                 }
-            }, clicktab(name){
+            },
+
+            //激活第一个show为true的tab
+            activatioFisrtShowTab(){
+                for(var i=0; i<this.tabs.length; i++){
+                    if(this.tabs[i].show){
+                        this.activeTabId = this.tabs[i].id;
+                        console.log(this.activeTabId, this.tabs[i].id);
+                        return false;
+                    }
+                }
+            },
+            
+            //关闭tab
+            handleTabRemove (id) {
+                console.log('handleTabRemove');
+                for(var i=0; i<this.tabs.length; i++){
+                    if(id == this.tabs[i].id){
+                        this.tabs[i].show = false;
+                        this.activatioFisrtShowTab();
+                        return false;
+                    }
+                }
+            }, 
+            
+            //点击tab
+            clickTab(id){
+                for(var i=0; i<this.tabs.length; i++){
+                    if(id == this.tabs[i].id){
+                        this.activeTabId = this.tabs[i].id;
+                    }
+                }
             }
         }
     }
