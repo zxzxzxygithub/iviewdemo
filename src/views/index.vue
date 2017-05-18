@@ -307,12 +307,11 @@
                 }
             },
 
-            //激活第一个show为true的tab
-            activatioFisrtShowTab(){
-                for(var i=0; i<this.tabs.length; i++){
+            //激活最后一个show为true的tab
+            activatioLastShowTab(){
+                for(var i=this.tabs.length-1; i>=0; i--){
                     if(this.tabs[i].show){
                         this.activeTabId = this.tabs[i].id;
-                        console.log(this.activeTabId, this.tabs[i].id);
                         return false;
                     }
                 }
@@ -320,11 +319,10 @@
             
             //关闭tab
             handleTabRemove (id) {
-                console.log('handleTabRemove');
                 for(var i=0; i<this.tabs.length; i++){
                     if(id == this.tabs[i].id){
                         this.tabs[i].show = false;
-                        this.activatioFisrtShowTab();
+                        this.activatioLastShowTab();
                         return false;
                     }
                 }
